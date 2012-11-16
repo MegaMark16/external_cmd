@@ -1,6 +1,6 @@
 -- External Command (external_cmd) mod by Menche
 -- Allows server commands / chat from outside minetest
--- License: CC0
+-- License: LGPL
 
 minetest.register_globalstep(
 	function(dtime)
