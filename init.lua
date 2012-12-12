@@ -4,9 +4,12 @@
 
 minetest.register_globalstep(
 	function(dtime)
-		f = (io.open(minetest.get_modpath("external_cmd").."/message", "r"))
+		f = (io.open(minetest.get_worldpath("external_cmd").."/message", "r"))
 		if f ~= nil then
 			local message = f:read("*line")
+			f:close()
+			os.remove(minetest.get_worldpath("external_cmd").."/message")
+
 			if message ~= nil then
 				local cmd, param = string.match(message, "^/([^ ]+) *(.*)")
 				if not param then
@@ -19,8 +22,6 @@ minetest.register_globalstep(
 					minetest.chat_send_all("SERVER: "..message)
 				end
 			end
-			f:close()
-			os.remove(minetest.get_modpath("external_cmd").."/message")
 		end
 	end
 )
