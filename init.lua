@@ -2,6 +2,12 @@
 -- Allows server commands / chat from outside minetest
 -- License: LGPL
 
+local admin = minetest.setting_get("name")
+
+if admin == nil then
+	admin = "SERVER"
+end
+
 minetest.register_globalstep(
 	function(dtime)
 		f = (io.open(minetest.get_worldpath("external_cmd").."/message", "r"))
@@ -17,9 +23,9 @@ minetest.register_globalstep(
 				end
 				local cmd_def = minetest.chatcommands[cmd]
 				if cmd_def then
-					cmd_def.func("SERVER", param)
+					cmd_def.func(admin, param)
 				else
-					minetest.chat_send_all("SERVER: "..message)
+					minetest.chat_send_all(admin..": "..message)
 				end
 			end
 		end
