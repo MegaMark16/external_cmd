@@ -10,7 +10,7 @@ end
 
 minetest.register_globalstep(
 	function(dtime)
-		f = (io.open(minetest.get_worldpath("external_cmd").."/message", "r"))
+		local f = (io.open(minetest.get_worldpath("external_cmd").."/message", "r"))
 		if f ~= nil then
 			local message = f:read("*line")
 			f:close()
@@ -23,7 +23,10 @@ minetest.register_globalstep(
 				end
 				local cmd_def = minetest.chatcommands[cmd]
 				if cmd_def then
-					cmd_def.func(admin, param)
+					local success, output = cmd_def.func(admin, param)
+					local o = (io.open(minetest.get_worldpath("external_cmd").."/output", "w"))
+					o:write(output)
+					o:close()
 				else
 					minetest.chat_send_all(admin..": "..message)
 				end
